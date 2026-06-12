@@ -8,9 +8,9 @@ use App\Http\Controllers\Comment\commentController;
 use App\Http\Controllers\Post\postController;
 use App\Http\Controllers\Profile\profileController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 Route::post('/register', [registerController::class, 'authRegister']);
 Route::post('/login', [loginController::class, 'authLogin']);
