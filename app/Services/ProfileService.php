@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\File;
 class ProfileService{
     public function update(array $data, User $user, $request){
         if ($request->hasFile('avatar')) {
-
             $data['avatar_url'] = $this->handleAvatarUpload($request);
         }
         $user->update([

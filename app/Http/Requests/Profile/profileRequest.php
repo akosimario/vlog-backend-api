@@ -30,7 +30,7 @@ class profileRequest extends FormRequest
             'gender' => 'nullable|in:male,female,other',
             'address' => 'nullable|string|max:500',
             'city'  => 'nullable|string|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg',
         ];
     }
 }

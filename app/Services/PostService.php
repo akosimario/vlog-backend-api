@@ -4,13 +4,13 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 class PostService
 {
-    public function create(array $data, User $user, $request){
+    public function create(array $data, $request){
         $imagePath = $this->handleImgUpload($request);
         return Post::create([
-            'user_id' => $user->id,
+            'user_id' => Auth::id() ?? 2,
             'title' => $data['title'],
             'body' => $data['body'],
             'image_url' => $imagePath,

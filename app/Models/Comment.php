@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use PHPUnit\Framework\Attributes\PostCondition;
 
 class Comment extends Model
 {
@@ -15,10 +14,9 @@ class Comment extends Model
     public function post(){
         return $this->belongsTo(Post::class);
     }
-    public function reply(){
+    public function replies(){
         return $this->hasMany(Comment::class,'discussion_id','id');
     }
-
     public function parent(){
         return $this->belongsTo(Comment::class,'discussion_id');
     }

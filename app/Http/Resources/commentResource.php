@@ -19,10 +19,11 @@ class commentResource extends JsonResource
             'body' => $this->body,
             'author' => [
                 'id' => $this->user->id,
-                'name' => $this->user->name,
+                'name' => $this->user->first_name . ' ' . $this->user->last_name,
+                'avatar_url' => $this->user->avatar_url,
             ],
             'discussion_id' => $this->discussion_id,
-            'replies' => CommentResource::collection($this->whenLoaded('reply')),
+            'replies' => CommentResource::collection($this->whenLoaded('replies')),
             'created_at' => $this->created_at->toDateTimeString(),
             'updated_at' => $this->updated_at->toDateTimeString(),
         ];
