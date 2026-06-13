@@ -5,21 +5,15 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\registerRequest;
 use App\Models\User;
+use App\Services\AuthService;
 class registerController extends Controller
 {
+    protected AuthService $authService;
+    public function __construct(AuthService $authService){
+        $this->authService = $authService;
+    }
     public function authRegister(registerRequest $registerRequest){
-        $validated = $registerRequest->validated();
-        User::create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-            'phone_number' => $validated['phone_number'] ?? null,
-            'birth_date'  => $validated['birth_date'] ?? null,
-            'gender' => $validated['gender'] ?? null,
-            'address'  => $validated['address'] ?? null,
-            'city' => $validated['city'] ?? null,
-        ]);
+        $this->authService->register($registerRequest->validated());
         return response()->json(['status' => true, 'message' => "register succesfully"], 201);
     }
 }
