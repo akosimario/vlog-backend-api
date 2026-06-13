@@ -35,14 +35,6 @@ class postController extends Controller
             ->latest()->get();
         return PostResource::collection($posts);
     }
-    public function updateContent(PostRequest $postRequest, Post $post)
-    {
-        if ($post->user_id !== Auth::id()) {
-            return response()->json(['status' => false, 'message' => 'unauthorized.',], 403);
-        }
-        $post = $this->postService->update($postRequest->validated(), $post, $postRequest);
-        return response()->json(['status' => true, 'message' => 'post updated successfully.']);
-    }
     public function destroyContent(Post $post)
     {
         if ($post->user_id !== Auth::id()) {

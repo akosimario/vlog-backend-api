@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\registerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\loginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Comment\commentController;
 use App\Http\Controllers\Post\postController;
 use App\Http\Controllers\Profile\profileController;
@@ -12,19 +13,26 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/register', [registerController::class, 'authRegister']);
-Route::post('/login', [loginController::class, 'authLogin']);
+Route::post('/register', [registerController::class, 'authRegister'])->middleware('throttle:register');
+Route::post('/login', [loginController::class, 'authLogin'])->middleware('throttle:login');
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::put('/posts/{post}', [postController::class, 'updateContent']);
-    Route::delete('/posts/{post}', [postController::class, 'destroyContent']);
-    Route::post('/posts/{post}/comments', [commentController::class, 'store']);
-    Route::post('/posts', [postController::class, 'storeContent']);
-    Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
-    Route::post('/comments/{comment}/reply', [CommentController::class, 'reply']);
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
-    Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
-    Route::get('/posts', [postController::class, 'fetchContent']);
+    Route::middleware('throttle:post')->group(function (){
+        Route::post('/posts', [postController::class, 'storeContent']);
+        Route::get('/posts', [postController::class, 'fetchContent']);
+        Route::delete('/posts/{post}', [postController::class, 'destroyContent']);
+    });
+    Route::middleware('throttle:comment')->group(function (){
+        Route::post('/posts/{post}/comments', [commentController::class, 'store']);
+        Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
+        Route::post('/comments/{comment}/reply', [CommentController::class, 'reply']);
+        Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+        Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+    });
+
+
+
     Route::get('/profile', [profileController::class, 'show']);
     Route::post('/profile', [profileController::class, 'update']);
+    Route::post('/logout', [LogoutController::class, 'logout']);
 });
