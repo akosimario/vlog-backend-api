@@ -21,6 +21,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/posts', [postController::class, 'storeContent']);
         Route::get('/posts', [postController::class, 'fetchContent']);
         Route::delete('/posts/{post}', [postController::class, 'destroyContent']);
+        Route::put('/posts/{post}', [postController::class, 'updateContent']);
     });
     Route::middleware('throttle:comment')->group(function (){
         Route::post('/posts/{post}/comments', [commentController::class, 'store']);

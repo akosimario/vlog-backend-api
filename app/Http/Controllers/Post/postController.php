@@ -43,4 +43,9 @@ class postController extends Controller
         $this->postService->delete($post);
         return response()->json(['status' => true, 'message' => 'post deleted successfully.']);
     }
+    public function updateContent(PostRequest $postRequest,Post $post){
+        $validted = $postRequest->validated();
+        $this->postService->update($validted,$post);
+        return response()->json(['status' => true, 'message' => 'post updated successfully.']);
+    }
 }

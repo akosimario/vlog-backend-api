@@ -26,7 +26,7 @@ class registerRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'string', 'confirmed', Password::min(12)->mixedCase()->symbols()->numbers()],
+            'password' => ['required', 'string', 'confirmed', Password::min(12)->mixedCase()->numbers(),'regex:/[@!%*#?&]/',],,
             'phone_number' => ['nullable', 'string', 'max:20'],
             'birth_date'   => ['nullable', 'date', 'before:today'],
             'gender' => ['nullable', 'in:male,female,other'],

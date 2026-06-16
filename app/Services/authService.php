@@ -3,24 +3,18 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    public function register(array $data)
-    {
-        return  User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'phone_number' => $data['phone_number'] ?? null,
-            'birth_date'  => $data['birth_date'] ?? null,
-            'gender' => $data['gender'] ?? null,
-            'address'  => $data['address'] ?? null,
-            'city' => $data['city'] ?? null,
-        ]);
+    protected UserRepository $userRepository;
+    public function __construct(UserRepository $userRepository){
+        $this->userRepository = $userRepository;
+    }
+    public function register(array $data){
+        return $this->userRepository->create($data);
     }
     public function login(array $credentials){
         return Auth::attempt($credentials);

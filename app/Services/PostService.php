@@ -4,18 +4,21 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Repositories\PostRepository;
 use Illuminate\Support\Facades\Auth;
 class PostService
 {
+    protected PostRepository $postRepository;
+    public function __construct(PostRepository $postRepository){
+        $this->postRepository = $postRepository;
+    }
     public function create(array $data, $request){
         $imagePath = $this->handleImgUpload($request);
-        return Post::create([
-            'user_id' => Auth::id() ?? 2,
+        return $this->postRepository->create(['user_id' => Auth::id() ?? 2,
             'title' => $data['title'],
             'body' => $data['body'],
             'image_url' => $imagePath,
-            'video_url' => $data['video_url'] ?? '',
-        ]);
+            'video_url' => $data['video_url'] ?? '']);
     }
     private function handleImgUpload($request){
         if (!$request->hasFile('image')) {
@@ -30,12 +33,11 @@ class PostService
         if (!empty($data['image'])) {
             $data['image_url'] = $this->handleImgUpload($data['image']);
         }
-        $post->update([
-            'title' => $data['title'] ?? $post->title,
+        $postData = ['title' => $data['title'] ?? $post->title,
             'body' => $data['body'] ?? $post->body,
             'image_url' => $data['image_url'] ?? $post->image_url,
-            'video_url' => $data['video_url'] ?? $post->video_url,
-        ]);
+            'video_url' => $data['video_url'] ?? $post->video_url,];
+        $this->postRepository->update($postData,$post);
         return $post;
     }
     public function delete(Post $post)
